@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CKD Hyperphosphatemia Guidelines & Tenapanor — Interactive Reference</title>
+<style>
+:root {
+--bg: #0f172a;
+--surface: #1e293b;
+--surface-2: #273449;
+--border: #334155;
+--text: #e2e8f0;
+--text-muted: #94a3b8;
+--accent: #38bdf8;
+--accent-2: #818cf8;
+--green: #34d399;
+--amber: #fbbf24;
+--red: #f87171;
+--pink: #f472b6;
+--radius: 12px;
+--shadow: 0 4px 24px rgba(0,0,0,.35);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+background: var(--bg);
+color: var(--text);
+line-height: 1.65;
+font-size: 15px;
+-webkit-font-smoothing: antialiased;
+}
+
+/* ── Layout ── */
+.app { display: flex; min-height: 100vh; }
+.sidebar {
+width: 270px; flex-shrink: 0;
+background: var(--surface);
+border-right: 1px solid var(--border);
+padding: 20px 0;
+position: sticky; top: 0; height: 100vh;
+overflow-y: auto;
+scrollbar-width: thin;
+}
+.sidebar::-webkit-scrollbar { width: 5px; }
+.sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+.sidebar h1 {
+font-size: 15px; font-weight: 700; letter-spacing: .5px;
+padding: 0 20px 16px; border-bottom: 1px solid var(--border);
+color: var(--accent); text-transform: uppercase;
+}
+.sidebar h1 span { display: block; font-size: 11px; color: var(--text-muted); font-weight: 400; margin-top: 3px; letter-spacing: 0; text-transform: none; }
+.nav-group { padding: 12px 0 4px; }
+.nav-group-label {
+font-size: 10px; text-transform: uppercase; letter-spacing: 1.2px;
+color: var(--text-muted); padding: 8px 20px 4px; font-weight: 600;
+}
+.nav-link {
+display: flex; align-items: center; gap: 10px;
+padding: 9px 20px; font-size: 13.5px; color: var(--text-muted);
+text-decoration: none; border-left: 3px solid transparent;
+transition: all .15s; cursor: pointer;
+}
+.nav-link:hover { background: var(--surface-2); color: var(--text); }
+.nav-link.active { border-left-color: var(--accent); color: var(--accent); background: rgba(56,189,248,.07); font-weight: 600; }
+.nav-link .icon { font-size: 15px; width: 20px; text-align: center; }
+
+.main { flex: 1; min-width: 0; padding: 32px 40px 80px; max-width: 1100px; }
+.section { display: none; animation: fadeIn .25s ease; }
+.section.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+h2 {
+font-size: 24px; font-weight: 700; margin-bottom: 6px;
+background: linear-gradient(135deg, var(--accent), var(--accent-2));
+-webkit-background-clip: text; -webkit-text-fill-color: transparent;
+background-clip: text;
+}
+.subtitle { color: var(--text-muted); font-size: 13.5px; margin-bottom: 24px; }
+
+h3 { font-size: 17px; font-weight: 650; margin: 28px 0 10px; color: var(--text); }
+h4 { font-size: 14.5px; font-weight: 600; margin: 18px 0 6px; color: var(--accent); }
+
+/* ── Cards ── */
+.card {
+background: var(--surface); border: 1px solid var(--border);
+border-radius: var(--radius); padding: 20px 22px; margin-bottom: 16px;
+box-shadow: var(--shadow);
+}
+.card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
+
+/* ── Badges ── */
+.badge {
+display: inline-block; padding: 2px 9px; border-radius: 20px;
+font-size: 11px; font-weight: 600; letter-spacing: .3px;
+vertical-align: middle; margin-left: 6px;
+}
+.badge-grade { background: rgba(56,189,248,.18); color: var(--accent); }
+.badge-grade-2d { background: rgba(52,211,153,.18); color: var(--green); }
+.badge-grade-2c { background: rgba(251,191,36,.18); color: var(--amber); }
+.badge-grade-1b { background: rgba(244,114,182,.18); color: var(--pink); }
+.badge-grade-ng { background: rgba(148,163,184,.18); color: var(--text-muted); }
+.badge-warn { background: rgba(248,113,113,.18); color: var(--red); }
+.badge-info { background: rgba(129,140,248,.18); color: var(--accent-2); }
+
+/* ── Tables ── */
+.tbl-wrap { overflow-x: auto; margin: 12px 0; border-radius: 10px; border: 1px solid var(--border); }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+thead th {
+background: var(--surface-2); text-align: left; padding: 10px 14px;
+font-weight: 650; font-size: 11.5px; text-transform: uppercase;
+letter-spacing: .6px; color: var(--text-muted); border-bottom: 1px solid var(--border);
+white-space: nowrap;
+}
+tbody td { padding: 9px 14px; border-bottom: 1px solid rgba(51,65,85,.5); vertical-align: top; }
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover { background: rgba(56,189,248,.04); }
+
+/* ── Alerts ── */
+.alert {
+border-radius: 10px; padding: 14px 18px; margin: 14px 0; font-size: 13.5px;
+border-left: 4px solid;
+}
+.alert-info { background: rgba(56,189,248,.08); border-color: var(--accent); }
+.alert-warn { background: rgba(251,191,36,.08); border-color: var(--amber); }
+.alert-danger { background: rgba(248,113,113,.08); border-color: var(--red); }
+.alert-success { background: rgba(52,211,153,.08); border-color: var(--green); }
+
+/* ── Tabs ── */
+.tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--border); margin: 18px 0 16px; overflow-x: auto; }
+.tab {
+padding: 9px 16px; font-size: 13px; font-weight: 550; cursor: pointer;
+color: var(--text-muted); border-bottom: 2px solid transparent;
+transition: all .15s; white-space: nowrap; background: none; border-top: none; border-left: none; border-right: none;
+}
+.tab:hover { color: var(--text); }
+.tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; animation: fadeIn .2s; }
+
+/* ── Accordion ── */
+.accordion { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 10px; }
+.acc-header {
+padding: 13px 18px; background: var(--surface-2); cursor: pointer;
+display: flex; justify-content: space-between; align-items: center;
+font-weight: 600; font-size: 14px; transition: background .15s;
+}
+.acc-header:hover { background: #2d3b52; }
+.acc-header .arrow { transition: transform .2s; font-size: 12px; color: var(--text-muted); }
+.accordion.open .acc-header .arrow { transform: rotate(90deg); }
+.acc-body { display: none; padding: 16px 18px; border-top: 1px solid var(--border); font-size: 13.5px; }
+.accordion.open .acc-body { display: block; }
+
+/* ── Comparison highlight ── */
+.hl { color: var(--accent); font-weight: 600; }
+.hl-green { color: var(--green); font-weight: 600; }
+.hl-amber { color: var(--amber); font-weight: 600; }
+.hl-red { color: var(--red); font-weight: 600; }
+
+ul, ol { padding-left: 20px; margin: 8px 0; }
+li { margin-bottom: 5px; }
+
+/* ── Cost indicator ── */
+.cost-low { color: var(--green); font-weight: 600; }
+.cost-mid { color: var(--amber); font-weight: 600; }
+.cost-high { color: var(--red); font-weight: 600; }
+
+/* ── Responsive ── */
+@media (max-width: 860px) {
+.sidebar { display: none; }
+.main { padding: 20px 18px 60px; }
+}
+
+.ref-list { font-size: 12.5px; color: var(--text-muted); }
+.ref-list li { margin-bottom: 8px; }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+<!-- ══════════════ SIDEBAR ══════════════ -->
+<nav class="sidebar" id="sidebar">
+<h1>CKD Phosphorus <span>Guidelines &amp; Tenapanor</span></h1>
+
+<div class="nav-group">
+<div class="nav-group-label">Overview</div>
+<a class="nav-link active" data-section="overview"><span class="icon">📋</span> Guideline Summary</a>
+<a class="nav-link" data-section="targets"><span class="icon">🎯</span> Target Ranges</a>
+</div>
+
+<div class="nav-group">
+<div class="nav-group-label">Guidelines</div>
+<a class="nav-link" data-section="kdigo"><span class="icon">🌐</span> KDIGO</a>
+<a class="nav-link" data-section="kdoqi"><span class="icon">🇺🇸</span> KDOQI</a>
+<a class="nav-link" data-section="nice"><span class="icon">🇬🇧</span> NICE</a>
+<a class="nav-link" data-section="japanese"><span class="icon">🇯🇵</span> JSDT (Japan)</a>
+<a class="nav-link" data-section="other"><span class="icon">🌏</span> Other Societies</a>
+</div>
+
+<div class="nav-group">
+<div class="nav-group-label">Treatment</div>
+<a class="nav-link" data-section="algorithm"><span class="icon">⚙️</span> Treatment Algorithm</a>
+<a class="nav-link" data-section="binders"><span class="icon">💊</span> Phosphate Binders</a>
+<a class="nav-link" data-section="tenapanor"><span class="icon">🔬</span> Tenapanor</a>
+<a class="nav-link" data-section="diet"><span class="icon">🥗</span> Dietary Management</a>
+</div>
+
+<div class="nav-group">
+<div class="nav-group-label">Evidence</div>
+<a class="nav-link" data-section="evidence"><span class="icon">📊</span> Evidence Summary</a>
+<a class="nav-link" data-section="cv-outcomes"><span class="icon">❤️</span> CV Outcomes</a>
+<a class="nav-link" data-section="references"><span class="icon">📚</span> References</a>
+</div>
+</nav>
+
+<!-- ══════════════ MAIN CONTENT ══════════════ -->
+<main class="main">
+
+<!-- ══════════ OVERVIEW ══════════ -->
+<section class="section active" id="overview">
+<h2>Guideline Summary</h2>
+<p class="subtitle">Major international guidelines for managing hyperphosphatemia in chronic kidney disease — consolidated.</p>
+
+<div class="card-grid">
+<div class="card">
+<h4>🌐 KDIGO 2024 Update</h4>
+<p style="font-size:13px;color:var(--text-muted);">The 2024 KDIGO guidelines<strong> continue to suggest lowering elevated phosphate toward the normal range</strong>, but emphasize a more comprehensive "3D" approach — <span class="hl">Diet, Drugs, and Dialysis</span> — extending beyond traditional phosphate binder therapy. Treatment decisions should be based on <strong>serial measurements of phosphate, calcium, and PTH considered together</strong>, not isolated values.</p>
+</div>
+<div class="card">
+<h4>🇺🇸 KDOQI</h4>
+<p style="font-size:13px;color:var(--text-muted);">KDOQI recommends maintaining serum phosphorus <strong>at or above 2.7 mg/dL and no higher than 4.6 mg/dL</strong> in CKD stages 3–4. For dialysis patients (stage 5), the target is <strong>3.5–5.5 mg/dL</strong>. The 2020 nutrition update suggests a lower normal-range goal of <strong>2.5–4.5 mg/dL</strong> for hemodialysis patients.</p>
+</div>
+<div class="card">
+<h4>🇬🇧 NICE (NG203)</h4>
+<p style="font-size:13px;color:var(--text-muted);">NICE recommends <strong>calcium acetate as first-line</strong> phosphate binder for adults with stage 4–5 CKD and hyperphosphatemia, alongside dietary management. If calcium acetate is not tolerated or contraindicated, <strong>sevelamer carbonate</strong> should be offered. Calcium carbonate may be considered if calcium acetate is not tolerated.</p>
+</div>
+<div class="card">
+<h4>🇯🇵 JSDT 2025</h4>
+<p style="font-size:13px;color:var(--text-muted);">The Japanese Society for Dialysis Therapy released its 2025 revision of the CKD-MBD guideline in December 2025 — the first update in 13 years. It emphasizes <strong>individualized treatment</strong>, controlling phosphate and calcium first then PTH, and recommends dietary phosphate restriction to <strong>≤700 mg/day</strong> with adequate dialysis and active vitamin D adjustment.</p>
+</div>
+</div>
+
+<h3>Key Guideline Comparison</h3>
+<div class="tbl-wrap">
+<table>
+<thead>
+<tr><th>Guideline</th><th>Phosphate Target</th><th>First-Line Binder</th><th>Calcium Restriction</th><th>Key Novelty</th></tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>KDIGO 2024</strong></td>
+<td>Lower toward normal range <span class="badge badge-grade-2c">2C</span></td>
+<td>No specific agent; depends on calcium/PTH status</td>
+<td>Restrict calcium-based binders <span class="badge badge-grade-2d">2D</span></td>
+<td>"3D" approach; treat based on trends</td>
+</tr>
+<tr>
+<td><strong>KDOQI</strong></td>
+<td>3.5–5.5 mg/dL (dialysis); 2.7–4.6 mg/dL (CKD 3–4)</td>
+<td>Not specified; historically calcium-based</td>
+<td>Limit total Ca to &lt;2000 mg/day</td>
+<td>Age-stratified targets in pediatrics</td>
+</tr>
+<tr>
+<td><strong>NICE NG203</strong></td>
+<td>Keep below upper normal limit</td>
+<td><strong>Calcium acetate</strong></td>
+<td>Monitor serum calcium</td>
+<td>Sevelamer if Ca-acetate not tolerated</td>
+</tr>
+<tr>
+<td><strong>JSDT 2025</strong></td>
+<td>Individualized; control P and Ca first</td>
+<td>Not rigidly specified; low-dose tenapanor emerging</td>
+<td>Strict P intake ≤700 mg/day</td>
+<td>Individualization; PTH management secondary</td>
+</tr>
+<tr>
+<td><strong>ERBP 2010</strong></td>
+<td>Toward normal range</td>
+<td>Calcium-based or sevelamer</td>
+<td>Prefer non-Ca in vascular calcification</td>
+<td>Early European framework</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div class="alert alert-info">
+<strong>🔑 Central paradox across all guidelines:</strong> Despite universal recommendations to lower phosphate, there is a <strong>lack of definitive RCT evidence</strong> that phosphate-lowering improves hard clinical outcomes such as mortality or cardiovascular events. The 2025 Cochrane review judged the evidence certainty as <span class="hl-red">low or very low</span> for most comparisons. This uncertainty applies to the entire class of phosphate-lowering therapies, including binders and tenapanor.
+</div>
+</section>
+
+<!-- ══════════ TARGETS ══════════ -->
+<section class="section" id="targets">
+<h2>Serum Phosphate Targets</h2>
+<p class="subtitle">Target ranges by CKD stage and guideline body.</p>
+
+<div class="tbl-wrap">
+<table>
+<thead>
+<tr><th>CKD Stage</th><th>KDIGO</th><th>KDOQI</th><th>NICE</th><th>Notes</th></tr>
+</thead>
+<tbody>
+<tr><td><strong>G3a–G4</strong> (non-dialysis)</td>
+<td>Lower toward normal range <span class="badge badge-grade-2c">2C</span></td>
+<td>2.7–4.6 mg/dL (0.87–1.49 mmol/L)</td>
+<td>Below upper normal limit</td>
+<td>Do not treat normal phosphate with binders</td></tr>
+<tr><td><strong>G5</strong> (dialysis)</td>
+<td>Lower toward normal range <span class="badge badge-grade-2c">2C</span></td>
+<td>3.5–5.5 mg/dL (1.13–1.78 mmol/L)</td>
+<td>Below upper normal limit</td>
+<td>2020 KDOQI nutrition update: 2.5–4.5 mg/dL</td></tr>
+<tr><td><strong>Pediatric</strong> (G2–G5D)</td>
+<td>Age-appropriate normal range <span class="badge badge-grade-ng">Not graded</span></td>
+<td>Age-stratified (see below)</td>
+<td>Same as adults for children</td>
+<td>KDOQI age-specific targets used most widely</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3>Pediatric Target Ranges (KDOQI)</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>Age</th><th>Phosphorus (mg/dL)</th><th>Calcium (mg/dL)</th></tr></thead>
+<tbody>
+<tr><td>0–5 months</td><td>5.2–8.4</td><td>8.7–11.3</td></tr>
+<tr><td>6–12 months</td><td>5.0–7.8</td><td>8.7–11.0</td></tr>
+<tr><td>1–5 years</td><td>4.5–6.5</td><td>9.4–10.8</td></tr>
+<tr><td>6–12 years</td><td>3.6–5.8</td><td>9.4–10.3</td></tr>
+<tr><td>13–20 years</td><td>2.3–4.5</td><td>8.8–10.2</td></tr>
+</tbody>
+</table>
+</div>
+<p style="font-size:12.5px;color:var(--text-muted);margin-top:6px;">Source: KDOQI pediatric CKD-MBD guidelines as adopted by the 2024 executive summary.</p>
+
+<div class="alert alert-warn" style="margin-top:18px;">
+<strong>⚠️ KDIGO 2024 nuance:</strong> The updated guidance recommends treatment only for patients with <strong>progressive or persistent hyperphosphatemia</strong> — not for those with normal or near-normal phosphate levels. This change was driven by evidence that phosphate binders may increase calcification scores in patients with near-normal phosphate.
+</div>
+</section>
+
+<!-- ══════════ KDIGO ══════════ -->
+<section class="section" id="kdigo">
+<h2>KDIGO Guidelines</h2>
+<p class="subtitle">Kidney Disease: Improving Global Outcomes — 2017 update with 2024 refinements.</p>
+
+<h3>Core Recommendations</h3>
+<div class="accordion open">
+<div class="acc-header"><span>4.1.1 — Assessment basis</span><span class="arrow">▶</span></div>
+<div class="acc-body">
+In patients with CKD G3a–G5D, treatments of CKD-MBD should be based on <strong>serial assessments of phosphate, calcium, and PTH levels, considered together</strong> (Not graded).
+</div>
+</div>
+<div class="accordion">
+<div class="acc-header"><span>4.1.2 — Phosphate lowering</span><span class="arrow">▶</span></div>
+<div class="acc-body">
+In patients with CKD G3a–G5D, <strong>lower elevated phosphate levels toward the normal range</strong> (2C). This unified recommendation applies across all CKD stages — previously, G5D had a different threshold.
+</div>
+</div>
+<div class="accordion">
+<div class="acc-header"><span>4.1.4 — Phosphate binders</span><span class="arrow">▶</span></div>
+<div class="acc-body">
+In patients with CKD stages 3–5 (2D) and 5D (2B), <strong>use phosphate-binding agents</strong> in the treatment of hyperphosphatemia.
+</div>
+</div>
+<div class="accordion">
+<div class="acc-header"><span>4.1.8 — Dietary phosphate</span><span class="arrow">▶</span></div>
+<div class="acc-body">
+In patients with CKD G3a–G5D, <strong>limit dietary phosphate intake</strong> alone or in combination with other treatments (2D). Consider phosphate source (animal, vegetable, additives) in making dietary recommendations (Not graded).
+</div>
+</div>
+<div class="accordion">
+<div class="acc-header"><span>Calcium-based binder restriction</span><span class="arrow">▶</span></div>
+<div class="acc-body">
+KDIGO 2017 suggested <strong>restricting the dose of calcium-based phosphate binders</strong> in adults with CKD G3a–G5D who have hypercalcemia, vascular calcification, or adynamic bone disease. The 2024 update continues this caution.
+</div>
+</div>
+
+<div class="alert alert-info">
+<strong>🧠 The "3D" framework:</strong> KDIGO 2024 explicitly organizes treatment around <span class="hl">Diet</span> (phosphate restriction), <span class="hl">Drugs</span> (phosphate binders, tenapanor, calcimimetics), and <span class="hl">Dialysis</span> (optimizing phosphate clearance).
+</div>
+
+<h3>KDIGO and Tenapanor</h3>
+<p style="font-size:13.5px;">KDIGO 2017 did not include tenapanor (FDA approval came in 2023). The 2024 update acknowledges novel non-binder therapies. In practice, tenapanor is positioned as <strong>add-on therapy for patients with inadequate response to, or intolerance of, phosphate binders</strong> — aligned with KDIGO's principle of intensifying therapy when targets are not met.</p>
+</section>
+
+<!-- ══════════ KDOQI ══════════ -->
+<section class="section" id="kdoqi">
+<h2>KDOQI Guidelines</h2>
+<p class="subtitle">Kidney Disease Outcomes Quality Initiative — the foundational US guidelines.</p>
+
+<h3>Target Ranges</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>Population</th><th>Phosphorus Target</th><th>Evidence Level</th></tr></thead>
+<tbody>
+<tr><td>CKD stages 3–4</td><td>2.7–4.6 mg/dL (0.87–1.49 mmol/L)</td><td>Evidence</td></tr>
+<tr><td>CKD stage 5 / dialysis</td><td>3.5–5.5 mg/dL (1.13–1.78 mmol/L)</td><td>Evidence</td></tr>
+<tr><td>Hemodialysis (2020 nutrition update)</td><td>2.5–4.5 mg/dL</td><td>Recommendation</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3>Dietary Phosphorus Restriction</h3>
+<p>KDOQI recommends restricting dietary phosphorus to <strong>800–1,000 mg/day</strong> (adjusted for dietary protein needs) when serum phosphorus is elevated.</p>
+
+<div class="alert alert-warn">
+<strong>⚠️ Practical challenge:</strong> KDOQI acknowledges the <strong>lack of sufficient evidence</strong> supporting phosphate-lowering therapy in patients with normal serum phosphate. The work group believes <strong>sufficient equipoise exists</strong> to justify a rigorous RCT comparing normalization of phosphate vs. permissive mild-to-moderate hyperphosphatemia in dialysis patients.
+</div>
+
+<h3>KDOQI on Calcium-Based Binders</h3>
+<p>The 2017 KDOQI commentary on KDIGO noted that while the updated guideline suggests <strong>avoidance of calcium-based phosphate binders</strong>, critical evidence gaps remain. For many US patients — especially those with limited prescription coverage — <strong>calcium-based binders may be the only feasible option</strong> due to cost.</p>
+</section>
+
+<!-- ══════════ NICE ══════════ -->
+<section class="section" id="nice">
+<h2>NICE Guidelines (UK)</h2>
+<p class="subtitle">National Institute for Health and Care Excellence — NG203, updated 2021.</p>
+
+<h3>Phosphate Binder Recommendations</h3>
+<div class="card">
+<h4>Adults (CKD stage 4–5)</h4>
+<ul>
+<li><strong>First-line:</strong> Offer <span class="hl">calcium acetate</span> to control serum phosphate.</li>
+<li><strong>Second-line:</strong> If calcium acetate is contraindicated (e.g., hypercalcemia, low PTH) or not tolerated, offer <span class="hl">sevelamer carbonate</span>.</li>
+<li><strong>Third-line:</strong> Consider <span class="hl">sucroferric oxyhydroxide</span> (for adults on dialysis if a calcium-based binder is not needed) or <span class="hl">calcium carbonate</span> (if a calcium-based binder is needed).</li>
+<li><strong>Lanthanum carbonate</strong> should only be considered if other phosphate binders cannot be used.</li>
+</ul>
+</div>
+
+<div class="card">
+<h4>Children and Young People (CKD stage 4–5)</h4>
+<p>Offer a <strong>calcium-based phosphate binder</strong> to control serum phosphate levels. Titrate dosage to achieve best possible phosphate control while keeping serum calcium <strong>below the upper normal limit</strong>.</p>
+</div>
+
+<div class="alert alert-info">
+<strong>📌 NICE vs. KDIGO difference:</strong> NICE places calcium acetate as first-line, while KDIGO 2017/2024 suggests restricting calcium-based binders. This reflects different weighting of cost-effectiveness vs. vascular calcification risk.
+</div>
+</section>
+
+<!-- ══════════ JAPANESE ══════════ -->
+<section class="section" id="japanese">
+<h2>JSDT Guidelines (Japan)</h2>
+<p class="subtitle">Japanese Society for Dialysis Therapy — CKD-MBD guideline, 2025 revision (first in 13 years).</p>
+
+<h3>Key Features of the 2025 Revision</h3>
+<ul style="font-size:13.5px;">
+<li><strong>Individualization emphasized:</strong> Treatment targets are tailored to the individual patient rather than rigid population-level thresholds.</li>
+<li><strong>Control sequence:</strong> Phosphate and calcium are controlled first, then PTH levels are managed.</li>
+<li><strong>Dietary restriction:</strong> Phosphate intake ≤700 mg/day, with emphasis on food quality — choosing low phosphorus-to-protein ratio foods, avoiding processed foods with inorganic phosphate additives, and favoring plant-based proteins (soy) with lower absorption rates.</li>
+<li><strong>Tenapanor in practice:</strong> Real-world Japanese practice starts tenapanor at <strong>10 mg/day</strong> (lower than the US 30 mg BID), with a mean dose of ~17 mg at 52 weeks, achieving phosphate control while reducing binder burden.</li>
+</ul>
+
+<div class="card">
+<h4>🇯🇵 Unique Japanese Approach</h4>
+<p style="font-size:13px;color:var(--text-muted);">The JSDT guideline includes a distinctive <strong>9-segment P/Ca management diagram</strong> (9分割図) for adjusting medications based on combined phosphate and calcium fractions — a more granular approach than Western guidelines.</p>
+</div>
+
+<div class="alert alert-success">
+<strong>🌱 Japanese real-world evidence:</strong> A 2025 open-label RCT (Suzuki et al.) in 90 hemodialysis patients found that low-dose tenapanor (starting 10 mg/day) significantly improved stool consistency and resolved constipation by week 5, with laxative use falling from 58.2% to 35.6% (p&lt;0.01). Phosphate control was comparable, and lanthanum carbonate prescriptions were largely replaced by low-dose tenapanor.
+</div>
+</section>
+
+<!-- ══════════ OTHER SOCIETIES ══════════ -->
+<section class="section" id="other">
+<h2>Other Society Guidelines</h2>
+<p class="subtitle">Additional international and regional recommendations.</p>
+
+<div class="card-grid">
+<div class="card">
+<h4>🇪🇺 ERBP (European Renal Best Practice)</h4>
+<p style="font-size:13px;color:var(--text-muted);">Suggests using phosphate-binding agents in CKD stages 3–5 (2D) and 5D (2B). Recommends <strong>avoiding calcium-based binders</strong> in patients with vascular or valvular calcification — lanthanum carbonate or sevelamer preferred as first choice.</p>
+</div>
+<div class="card">
+<h4>🇨🇦 Canadian Society of Nephrology</h4>
+<p style="font-size:13px;color:var(--text-muted);">For children with CKD G2–G5D, recommends basing phosphate-lowering treatment choice on <strong>serum calcium levels</strong>. Calcium-based binders recommended when calcium is below age-specific upper normal limit.</p>
+</div>
+<div class="card">
+<h4>🇨🇳 Chinese Expert Consensus 2025</h4>
+<p style="font-size:13px;color:var(--text-muted);">Published July 2025, provides practical guidance on <strong>timing of intervention, target serum phosphate levels, dietary restriction, phosphate-lowering agents, secondary hyperparathyroidism control, adequate dialysis, and patient education</strong>.</p>
+</div>
+<div class="card">
+<h4>🌏 Indian Commentary (KDIGO)</h4>
+<p style="font-size:13px;color:var(--text-muted);">Suggests recommended targets for CKD stage 3–4 of <strong>3–4.6 mg/dL</strong>, and for stage 5 of <strong>3.5–5.5 mg/dL</strong> — consistent with KDOQI.</p>
+</div>
+</div>
+</section>
+
+<!-- ══════════ ALGORITHM ══════════ -->
+<section class="section" id="algorithm">
+<h2>Treatment Algorithm</h2>
+<p class="subtitle">Stepwise approach to hyperphosphatemia in CKD.</p>
+
+<div class="card" style="border-left:4px solid var(--accent);">
+<h4>Step 1 — Confirm persistent hyperphosphatemia</h4>
+<ul style="font-size:13.5px;">
+<li>Measure serum phosphate, calcium, PTH, 25-OH vitamin D, and alkaline phosphatase starting at <strong>CKD stage 3a</strong>.</li>
+<li>Treat only if phosphate is <strong>progressively or persistently elevated</strong> — do not treat normal levels with binders.</li>
+<li>Assess trends, not isolated values. Consider all three parameters together.</li>
+</ul>
+</div>
+
+<div class="card" style="border-left:4px solid var(--green);">
+<h4>Step 2 — Dietary phosphate restriction</h4>
+<ul style="font-size:13.5px;">
+<li>Restrict dietary phosphate to <strong>0.8–1 g/day</strong> (typical Western guideline) or <strong>≤700 mg/day</strong> (JSDT).</li>
+<li>Focus on <strong>phosphate quality</strong>: avoid processed foods with inorganic phosphate additives (absorption ~100%); favor plant-based proteins (absorption ~40%).</li>
+<li>Ensure adequate protein intake to prevent malnutrition.</li>
+</ul>
+</div>
+
+<div class="card" style="border-left:4px solid var(--amber);">
+<h4>Step 3 — Optimize dialysis</h4>
+<ul style="font-size:13.5px;">
+<li>For dialysis patients, ensure <strong>adequate dialysis dose</strong> before escalating pharmacotherapy.</li>
+<li>Consider intensified dialysis regimens for persistent hyperphosphatemia in G5D.</li>
+</ul>
+</div>
+
+<div class="card" style="border-left:4px solid var(--pink);">
+<h4>Step 4 — Phosphate binders</h4>
+<ul style="font-size:13.5px;">
+<li><strong>Calcium-based first-line (NICE):</strong> Calcium acetate preferred; titrate to keep calcium below upper normal limit.</li>
+<li><strong>Non-calcium binders preferred (KDIGO/ERBP) if:</strong> hypercalcemia, vascular calcification, adynamic bone disease, or suspected calcium overload.</li>
+<li>Combine calcium-based + non-calcium binders if phosphate persists despite maximum tolerated dose.</li>
+</ul>
+</div>
+
+<div class="card" style="border-left:4px solid var(--accent-2);">
+<h4>Step 5 — Add tenapanor (if eligible)</h4>
+<ul style="font-size:13.5px;">
+<li>Indicated as <strong>add-on therapy</strong> for adults on dialysis with inadequate response to, or intolerance of, phosphate binders.</li>
+<li><strong>30 mg BID</strong> in the US; Japanese practice starts at <strong>10 mg/day</strong> and titrates based on response and GI tolerability.</li>
+<li>Particularly rational in patients with <strong>coexisting constipation</strong> — the laxative effect becomes therapeutic.</li>
+<li>Do not take right before hemodialysis; take before the next meal following dialysis.</li>
+</ul>
+</div>
+
+<div class="card" style="border-left:4px solid var(--red);">
+<h4>Step 6 — Reassess and individualize</h4>
+<ul style="font-size:13.5px;">
+<li>Monitor serum phosphate, calcium, and PTH regularly. Frequency depends on CKD severity and treatment changes.</li>
+<li>If PTH is progressively rising or &gt;9× upper limit of normal despite phosphate control and vitamin D repletion, consider <strong>active vitamin D analog or calcimimetic</strong>.</li>
+<li>Do <strong>not</strong> correct PTH to normal — risks adynamic bone disease.</li>
+</ul>
+</div>
+
+<div class="alert alert-warn">
+<strong>⚠️ Pediatric consideration:</strong> Tenapanor is <strong>contraindicated in children &lt;6 years</strong> and should be avoided up to 12 years due to serious dehydration risk (boxed warning). For pediatric patients, use calcium-based and/or non-calcium binders with age-appropriate targets.
+</div>
+</section>
+
+<!-- ══════════ BINDERS ══════════ -->
+<section class="section" id="binders">
+<h2>Phosphate Binders</h2>
+<p class="subtitle">Comparative properties, efficacy, cost, dosing, and guideline positioning.</p>
+
+<div class="tbl-wrap">
+<table>
+<thead>
+<tr><th>Agent</th><th>Class</th><th>Typical Dose</th><th>Efficacy</th><th>Cost</th><th>Key Advantages</th><th>Key Disadvantages</th><th>Guideline Position</th></tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Calcium acetate</strong></td>
+<td>Calcium-based</td>
+<td>667–1334 mg with meals</td>
+<td>Effective; equivalent phosphate control to sevelamer in TTG trial (5.1 ± 1.2 vs 5.1 ± 1.4 mg/dL)[citation:13]</td>
+<td><span class="cost-low">Low</span> — inexpensive, generic</td>
+<td>Effective; NICE first-line; lower elemental calcium than carbonate</td>
+<td>Hypercalcemia; vascular calcification risk; higher CAC progression vs sevelamer (14% vs 0% at 26 weeks)[citation:13]</td>
+<td>NICE first-line; KDIGO restricts</td>
+</tr>
+<tr>
+<td><strong>Calcium carbonate</strong></td>
+<td>Calcium-based</td>
+<td>500–1500 mg with meals</td>
+<td>Effective; lowers serum phosphorus and raises calcium in majority of patients[citation:1][citation:19]</td>
+<td><span class="cost-low">Lowest</span> — very inexpensive, widely available</td>
+<td>Very inexpensive; widely available</td>
+<td>Higher elemental calcium load than acetate; hypercalcemia risk; vascular calcification[citation:13]</td>
+<td>NICE second-line if acetate not tolerated</td>
+</tr>
+<tr>
+<td><strong>Sevelamer carbonate</strong></td>
+<td>Non-calcium polymer</td>
+<td>800–2400 mg with meals</td>
+<td>Equivalent phosphate control to calcium-based (TTG trial)[citation:13]; equivalent to sucroferric oxyhydroxide (MD −0.07 mmol/L)[citation:8]</td>
+<td><span class="cost-mid">Moderate–High</span> — branded; generic available ($5.84/tablet, ~$1,577/270 tabs)[citation:26]</td>
+<td>No calcium load; may reduce all-cause mortality vs calcium-based (RR 0.59)[citation:13]</td>
+<td>Pill burden; GI effects; may increase constipation risk (RR 3.27)</td>
+<td>KDIGO/ERBP preferred if vascular calcification</td>
+</tr>
+<tr>
+<td><strong>Lanthanum carbonate</strong></td>
+<td>Non-calcium metal</td>
+<td>500–1000 mg with meals</td>
+<td>Dose-dependent phosphorus reduction (r = −0.47, P<0.001); may have little or no difference in serum phosphate vs placebo (MD −0.04 mg/dL, low certainty)[citation:9][citation:3]</td>
+<td><span class="cost-high">High</span> — branded; NICE reserves for third-line</td>
+<td>No calcium load; slower CACS progression vs calcium-based</td>
+<td>Cost; GI effects; NICE third-line only</td>
+<td>KDIGO/ERBP alternative</td>
+</tr>
+<tr>
+<td><strong>Sucroferric oxyhydroxide</strong></td>
+<td>Iron-based</td>
+<td>500–1500 mg with meals</td>
+<td>Equivalent to sevelamer (MD −0.07 mmol/L, NS)[citation:8]; more pronounced phosphorus reduction vs lanthanum in one study[citation:16]</td>
+<td><span class="cost-high">High</span> — branded; NICE analysis: ICER ~£50,000 vs sevelamer[citation:38]; would need 86.2% price reduction to match calcium-based[citation:27]</td>
+<td>Ranked best for phosphate lowering; low pill burden; better GI profile than sevelamer (OR 1.60 for GI AEs favoring SFOH)[citation:8]</td>
+<td>GI effects; iron accumulation concerns; high cost</td>
+<td>NICE third-line for dialysis</td>
+</tr>
+<tr>
+<td><strong>Ferric citrate</strong></td>
+<td>Iron-based</td>
+<td>1–3 g with meals</td>
+<td>Effective phosphate lowering; also improves iron parameters (ferritin ↑, TSAT ↑)[citation:5]</td>
+<td><span class="cost-high">High</span> — branded ($7.60/tablet, ~$1,520/200 tabs)[citation:26]</td>
+<td>Dual benefit: lowers phosphate and improves iron; reduces ESA (−30.8 μg/month) and IV iron use[citation:11]</td>
+<td>GI effects; dark stools; iron overload risk</td>
+<td>Alternative; useful in iron deficiency</td>
+</tr>
+<tr>
+<td><strong>Tenapanor</strong></td>
+<td>NHE3 inhibitor (non-binder)</td>
+<td>30 mg BID (US); 10 mg/day start (Japan)</td>
+<td>Add-on: −1.76 mg/dL vs placebo (95% CI −2.16 to −1.37)[citation:23]; monotherapy effective[citation:6]</td>
+<td><span class="cost-high">High</span> — branded; cost-effectiveness uncertain (ATAG: no additional benefit vs iron-based binders for monotherapy population)[citation:23]</td>
+<td>Reduces paracellular absorption; dual benefit in constipation; reduces pill burden</td>
+<td>Diarrhea (18–74%); not a binder — additive mechanism; cost</td>
+<td>Add-on if inadequate response/intolerance to binders</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div class="alert alert-info">
+<strong>📊 Network meta-analysis rankings (70 RCTs, 15,551 dialysis patients):</strong> Sucroferric oxyhydroxide and tenapanor ranked highest for lowering all-cause mortality. Sevelamer was the only binder with a <strong>statistically significant mortality benefit vs. calcium-based agents</strong> (RR 0.59, 95% CI 0.37–0.94).[citation:4][citation:13]
+</div>
+
+<div class="alert alert-warn">
+<strong>⚠️ Cochrane 2025 bottom line:</strong> Phosphate binders lower serum phosphate, but the evidence that they improve hard clinical outcomes is <strong>low or very low certainty</strong>. Sevelamer may have little or no effect on death from any cause (RR 0.45, 95% CI 0.13–1.53) and may increase constipation risk (RR 3.27).[citation:9]
+</div>
+
+<div class="alert alert-info">
+<strong>💰 Cost context (US pricing, without insurance):</strong> Calcium-based binders are consistently the lowest cost. Sevelamer and iron-based binders are moderate-to-high. Branded agents (lanthanum, sucroferric oxyhydroxide, ferric citrate, tenapanor) are highest. A 2026 Canadian CDR analysis found sucroferric oxyhydroxide's ICUR vs generic sevelamer was $22.6 million/QALY — far exceeding conventional thresholds.[citation:27]
+</div>
+</section>
+
+<!-- ══════════ TENAPANOR ══════════ -->
+<section class="section" id="tenapanor">
+<h2>Tenapanor (Xphozah®)</h2>
+<p class="subtitle">Minimally absorbed NHE3 inhibitor — dual-purpose therapy for hyperphosphatemia and constipation.</p>
+
+<div class="card" style="background:linear-gradient(135deg, rgba(56,189,248,.08), rgba(129,140,248,.08)); border-color: rgba(56,189,248,.3);">
+<h4>Mechanism of Action</h4>
+<p style="font-size:13.5px;">Tenapanor is a <strong>minimally absorbed sodium-hydrogen exchanger 3 (NHE3) inhibitor</strong> that reduces <strong>paracellular intestinal phosphate absorption</strong>. Its on-target effect of increasing stool sodium and water content makes it uniquely dual-purpose in dialysis patients with both hyperphosphatemia and constipation. It is <strong>not a phosphate binder</strong> — it works by a complementary mechanism.</p>
+</div>
+
+<h3>FDA-Approved Indication (Xphozah)</h3>
+<div class="alert alert-success">
+<strong>✔ Indicated</strong> to reduce serum phosphorus in adults with CKD on dialysis as <strong>add-on therapy</strong> for patients with inadequate response to, or intolerance of, phosphate binders. <strong>Dose:</strong> 30 mg orally twice daily before the morning and evening meals, titrated to serum phosphorus and GI tolerability.
+</div>
+<div class="alert alert-danger">
+<strong>✘ Not approved</strong> for constipation as a primary indication. The IBS-C formulation (Ibsrela) is dosed higher at <strong>50 mg twice daily</strong>.
+</div>
+
+<h3>Dosing Details (Xphozah / Phosphate Indication)</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>Parameter</th><th>Detail</th></tr></thead>
+<tbody>
+<tr><td><strong>Standard dose</strong></td><td>30 mg PO BID, just before first and last meals of the day</td></tr>
+<tr><td><strong>Titration</strong></td><td>Adjust based on serum phosphorus and GI tolerability</td></tr>
+<tr><td><strong>Dialysis timing</strong></td><td>Do <strong>not</strong> take right before hemodialysis — take before the next meal following dialysis (diarrhea may occur)</td></tr>
+<tr><td><strong>Renal adjustment</strong></td><td><strong>None required</strong> — M1 metabolite levels in ESRD on hemodialysis not notably different from healthy subjects</td></tr>
+<tr><td><strong>Japanese practice</strong></td><td>Start at <strong>5–10 mg/day</strong>, titrate up to 30 mg BID; mean dose ~17 mg at 52 weeks</td></tr>
+<tr><td><strong>Pediatric</strong></td><td><span class="hl-red">Contraindicated &lt;6 years</span>; avoided up to 12 years (boxed warning — serious dehydration risk)</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3>Evidence for Phosphate Lowering</h3>
+<div class="tab-container">
+<div class="tabs" data-tab-group="tena">
+<button class="tab active" data-tab="tena-amplify">AMPLIFY Trial</button>
+<button class="tab" data-tab="tena-block">Block et al. 2017</button>
+<button class="tab" data-tab="tena-suzuki">Suzuki 2025 RCT</button>
+<button class="tab" data-tab="tena-longterm">PHREEDOM (52-wk)</button>
+</div>
+<div class="tab-panel active" id="tena-amplify">
+<div class="card">
+<h4>AMPLIFY — Tenapanor + Phosphate Binders (Dual-Mechanism)</h4>
+<p style="font-size:13px;">Pergola et al., JASN 2021. Randomized trial of tenapanor + phosphate binders vs. binders alone in maintenance dialysis patients. Tenapanor added to binders produced <strong>greater phosphate reduction</strong> than binders alone, confirming additive benefit of the dual-mechanism approach.</p>
+</div>
+</div>
+<div class="tab-panel" id="tena-block">
+<div class="card">
+<h4>Block et al. 2017 — Monotherapy in Hemodialysis</h4>
+<p style="font-size:13px;">JASN 2017. Tenapanor monotherapy significantly lowered serum phosphate in hemodialysis patients compared with placebo. Established proof-of-concept for NHE3 inhibition as a phosphate-lowering strategy.</p>
+</div>
+</div>
+<div class="tab-panel" id="tena-suzuki">
+<div class="card">
+<h4>Suzuki et al. 2025 — Open-Label RCT (Japan)</h4>
+<p style="font-size:13px;">90 hemodialysis patients randomized to tenapanor (started 10 mg/day, titrated) vs. standard care over 23 weeks.</p>
+<ul style="font-size:13px;">
+<li><strong>Constipation:</strong> BSFS 1–2 resolved by week 5; laxative use fell from <strong>58.2% to 35.6%</strong> (p&lt;0.01)[citation:18]</li>
+<li><strong>Phosphate:</strong> Comparable control between groups[citation:18]</li>
+<li><strong>Binder burden:</strong> Lanthanum carbonate prescriptions largely replaced by low-dose tenapanor[citation:18]</li>
+<li><strong>Safety:</strong> Transient early loose stools; 10 patients discontinued for diarrhea[citation:18]</li>
+</ul>
+</div>
+</div>
+<div class="tab-panel" id="tena-longterm">
+<div class="card">
+<h4>PHREEDOM — 52-Week Open-Label Study</h4>
+<p style="font-size:13px;">Koiwa et al., Scientific Reports 2023. Long-term tenapanor maintained serum phosphorus within target while allowing <strong>substantial reduction/elimination of phosphate binders</strong>. No major safety problems identified; safety profile consistent with shorter-term studies.</p>
+</div>
+</div>
+</div>
+
+<h3>Safety Profile</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>Adverse Effect</th><th>Incidence</th><th>Management</th></tr></thead>
+<tbody>
+<tr><td><strong>Diarrhea</strong></td><td>18–74% across trials; 53.9% vs 8.0% with binder in 26-week period</td><td>Start low, titrate slowly; usually transient; discontinuation 8.5–16.7%</td></tr>
+<tr><td><strong>Loose stools</strong></td><td>Common early; typically resolves</td><td>Reassure patient; adjust timing around dialysis</td></tr>
+<tr><td><strong>Dehydration</strong></td><td>Boxed warning in pediatrics</td><td>Contraindicated &lt;6 years; avoid up to 12 years</td></tr>
+<tr><td><strong>Serious adverse events</strong></td><td>11–17% with tenapanor vs 16–23% with sevelamer</td><td>Favorable safety ranking vs. sevelamer in some analyses</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="alert alert-success">
+<strong>💡 Practical takeaway:</strong> Tenapanor is most rational in a dialysis patient with hyperphosphatemia inadequately controlled or intolerant of binders who <strong>also has constipation</strong> — where its laxative effect becomes a therapeutic advantage rather than a nuisance. Start low and titrate. It can also reduce overall pill and laxative burden.
+</div>
+</section>
+
+<!-- ══════════ DIET ══════════ -->
+<section class="section" id="diet">
+<h2>Dietary Management</h2>
+<p class="subtitle">Phosphate restriction — the foundation of all guidelines.</p>
+
+<div class="card-grid">
+<div class="card">
+<h4>🎯 Restriction Targets</h4>
+<ul style="font-size:13px;">
+<li><strong>MSD/KDIGO-based:</strong> 0.8–1 g/day for eGFR &lt;60 mL/min/1.73m²</li>
+<li><strong>KDOQI:</strong> 800–1,000 mg/day (adjusted for protein needs)</li>
+<li><strong>JSDT:</strong> ≤700 mg/day</li>
+</ul>
+</div>
+<div class="card">
+<h4>🧬 Phosphate Quality Matters</h4>
+<ul style="font-size:13px;">
+<li><strong>Inorganic phosphate additives</strong> (processed foods) — absorption ~100% — <span class="hl-red">avoid</span></li>
+<li><strong>Animal protein</strong> — absorption ~60–70%</li>
+<li><strong>Plant protein</strong> (soy, legumes) — absorption ~40% — <span class="hl-green">prefer</span></li>
+</ul>
+</div>
+<div class="card">
+<h4>🚫 Foods to Limit</h4>
+<ul style="font-size:13px;">
+<li>Dairy products (milk, cheese, yogurt, ice cream)</li>
+<li>Processed meats with phosphate additives</li>
+<li>Cola drinks (phosphoric acid)</li>
+<li>Processed baked goods and convenience foods</li>
+</ul>
+</div>
+<div class="card">
+<h4>✅ Practical Strategies</h4>
+<ul style="font-size:13px;">
+<li>Cook at home with fresh ingredients</li>
+<li>Read labels for "phos" additives (dicalcium phosphate, sodium hexametaphosphate)</li>
+<li>Choose fresh fruits and vegetables (low-phosphate)</li>
+<li>Work with a renal dietitian for individualized plan</li>
+</ul>
+</div>
+</div>
+
+<div class="alert alert-warn">
+<strong>⚠️ The protein-phosphorus dilemma:</strong> The majority of high-biological-value proteins have high phosphate content. It is not simple to devise a dietary plan that lowers phosphate without compromising protein intake. Maintaining adherence to low-phosphate diets is challenging.
+</div>
+</section>
+
+<!-- ══════════ EVIDENCE ══════════ -->
+<section class="section" id="evidence">
+<h2>Evidence Summary</h2>
+<p class="subtitle">Grading of recommendations and strength of evidence across guidelines.</p>
+
+<h3>GRADE Evidence Levels Used by KDIGO</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>Grade</th><th>Meaning</th><th>Example in Hyperphosphatemia</th></tr></thead>
+<tbody>
+<tr><td><span class="badge badge-grade-1b">1B</span></td><td>Strong recommendation, moderate-quality evidence</td><td>Use calcium-based binders in pediatric CKD G3a–G5D when calcium is below upper normal limit</td></tr>
+<tr><td><span class="badge badge-grade-2c">2C</span></td><td>Weak recommendation, low-quality evidence</td><td>Lower elevated phosphate toward normal range</td></tr>
+<tr><td><span class="badge badge-grade-2d">2D</span></td><td>Weak recommendation, very low-quality evidence</td><td>Limit dietary phosphate intake; restrict calcium-based binders</td></tr>
+<tr><td><span class="badge badge-grade-ng">Not graded</span></td><td>Expert consensus / insufficient evidence</td><td>Base treatment on serial assessments of phosphate, calcium, PTH considered together</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3>What the Highest-Quality Evidence Shows</h3>
+<div class="accordion open">
+<div class="acc-header"><span>Phosphate binders lower serum phosphate — yes</span><span class="arrow">▶</span></div>
+<div class="acc-body">
+All guidelines agree that phosphate binders effectively lower serum phosphate. The Cochrane 2025 review (134 studies, 20,913 adults) confirms this is the <strong>best-established effect</strong>.[citation:9]
+</div>
+</div>
+<div class="accordion">
+<div class="acc-header"><span>Hard clinical outcomes — uncertain</span><span class="arrow">▶</span></div>
+<div class="acc-body">
+The Cochrane review found <strong>low or very low certainty</strong> for all-cause mortality, cardiovascular death, and vascular calcification outcomes. Sevelamer may have little or no effect on death from any cause (RR 0.45, 95% CI 0.13–1.53; 6 studies, 781 participants; low-certainty evidence).[citation:9]
+</div>
+</div>
+<div class="accordion">
+<div class="acc-header"><span>Tenapanor — phosphate lowering confirmed, outcomes not powered</span><span class="arrow">▶</span></div>
+<div class="acc-body">
+Tenapanor significantly lowers serum phosphate as monotherapy and in combination with binders. However, <strong>no trial has been powered</strong> to show improvement in cardiovascular events or mortality as a primary endpoint.
+</div>
+</div>
+<div class="accordion">
+<div class="acc-header"><span>Network meta-analysis rankings</span><span class="arrow">▶</span></div>
+<div class="acc-body">
+In a 2025 network meta-analysis of 70 RCTs (15,551 dialysis patients), <strong>sucroferric oxyhydroxide and tenapanor ranked highest for lowering all-cause mortality</strong> based on SUCRA probabilities. Sevelamer was the only binder with a statistically significant mortality benefit vs. calcium-based agents (RR 0.59, 95% CI 0.37–0.94).[citation:4]
+</div>
+</div>
+<div class="accordion">
+<div class="acc-header"><span>The critical evidence gap</span><span class="arrow">▶</span></div>
+<div class="acc-body">
+The 2025 KDOQI commentary states: <em>"There remains a lack of knowledge regarding the efficacy of phosphate binders on hard clinical outcomes, such as mortality... The KDOQI work group believes that sufficient equipoise exists to justify an adequately powered rigorously conducted clinical trial assessing the safety and efficacy of normalization of phosphate levels versus permissive mild to moderate hyperphosphatemia in hyperphosphatemic patients undergoing dialysis."</em>
+</div>
+</div>
+</section>
+
+<!-- ══════════ CV OUTCOMES ══════════ -->
+<section class="section" id="cv-outcomes">
+<h2>Cardiovascular Outcomes</h2>
+<p class="subtitle">Tenapanor vs. conventional phosphate binders — what the evidence does and doesn't show.</p>
+
+<div class="alert alert-warn">
+<strong>⚠️ No head-to-head trial</strong> has been powered to answer definitively whether tenapanor improves long-term cardiovascular outcomes compared with conventional phosphate binders. What exists are indirect comparisons, post-hoc analyses, and surrogate endpoints.
+</div>
+
+<h3>Cardiovascular Mortality: Indirect Signals</h3>
+<div class="card">
+<ul style="font-size:13.5px;">
+<li><strong>Network meta-analysis (2025, 70 RCTs):</strong> Sucroferric oxyhydroxide and tenapanor ranked highest for lowering all-cause mortality. Sevelamer was the only binder with a <strong>statistically significant</strong> mortality benefit vs. calcium-based binders (RR 0.59, 95% CI 0.37–0.94).[citation:4]</li>
+<li><strong>TEN-02-301 (26-week open-label):</strong> Deaths similar — 1.7% with tenapanor vs 2.2% with phosphate binders, mostly cardiovascular or sepsis.</li>
+<li><strong>PHREEDOM (52-week):</strong> Tenapanor associated with a smaller percentage of deaths and hospitalizations than sevelamer.</li>
+</ul>
+</div>
+
+<h3>MACE and Hospitalizations</h3>
+<div class="card">
+<ul style="font-size:13.5px;">
+<li><strong>FDA review:</strong> Early concern about venous thromboembolism (4.7% vs 0% on placebo) and significant cardiovascular AEs (8% vs 0.7% on placebo) in an early trial.</li>
+<li><strong>TEN-02-301 (larger controlled trial):</strong> Serious adverse events reported <strong>more frequently with sevelamer</strong> (16–23%) than tenapanor (11–17%) across study periods.</li>
+<li><strong>Specific CV AEs:</strong> Small numerical imbalances (acute respiratory failure 3.1% vs 0.7%; congestive cardiac failure 1.2% vs 0%) — not statistically significant.</li>
+</ul>
+</div>
+
+<h3>Safety Profile Comparison</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>Parameter</th><th>Tenapanor</th><th>Phosphate Binders</th></tr></thead>
+<tbody>
+<tr><td><strong>Diarrhea</strong></td><td>53.9% (vs 8.0% with binder in 26-week period)</td><td>Lower diarrhea risk</td></tr>
+<tr><td><strong>Constipation</strong></td><td>Improves constipation</td><td>Sevelamer may increase constipation (RR 3.27)[citation:9]</td></tr>
+<tr><td><strong>Hypercalcemia</strong></td><td>No calcium load</td><td>Calcium-based binders increase risk</td></tr>
+<tr><td><strong>Pill burden</strong></td><td>Can reduce binder pill burden</td><td>High pill burden for some agents</td></tr>
+<tr><td><strong>Serious AEs</strong></td><td>11–17%</td><td>16–23% with sevelamer</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="alert alert-info">
+<strong>💡 Bottom line:</strong> Tenapanor may rank favorably for all-cause mortality in indirect comparisons and shows lower serious adverse event rates than sevelamer in some analyses. However, <strong>no trial has directly compared tenapanor to phosphate binders for cardiovascular events or mortality as a primary endpoint</strong>. The decision to use tenapanor should be based on phosphate-lowering efficacy, tolerability, and dual benefit in constipated dialysis patients — not on a proven cardiovascular advantage.
+</div>
+</section>
+
+<!-- ══════════ REFERENCES ══════════ -->
+<section class="section" id="references">
+<h2>References</h2>
+<p class="subtitle">Key sources underpinning this reference.</p>
+
+<ol class="ref-list">
+<li>Slatopolsky E, et al. Calcium Carbonate as a Phosphate Binder in Patients with Chronic Renal Failure Undergoing Dialysis. <em>N Engl J Med</em>. 1986;315:157-161.</li>
+<li>Hill Gallant KM, et al. Lanthanum carbonate lowers serum phosphorus without altering body phosphorus burden in maintenance peritoneal dialysis patients: a randomized crossover trial. <em>Am J Clin Nutr</em>. 2025;122(6):1537-1538.</li>
+<li>Nishimoto M, et al. Efficacy and Safety of Phosphate-Lowering Agents for Adult Patients with CKD Requiring Dialysis: A Network Meta-Analysis. <em>Clin J Am Soc Nephrol</em>. 2025;20(5):676-696.</li>
+<li>Lewis JB, et al. Ferric Citrate as a Phosphate Binder in Dialysis Patients. <em>J Am Soc Nephrol</em>. 2015.</li>
+<li>NORMALIZE Study Investigators. Tenapanor Improves Long-Term Control of Hyperphosphatemia in Patients Receiving Maintenance Dialysis. <em>Kidney360</em>. 2023;4:1580.</li>
+<li>Koiwa F, et al. Long-term safety and decrease of pill burden by tenapanor therapy: a phase 3 open-label study in hemodialysis patients with hyperphosphatemia. <em>Sci Rep</em>. 2023;13(1):19100.</li>
+<li>Suzuki N, et al. Efficacy of tenapanor in managing hyperphosphatemia and constipation in hemodialysis patients: A randomized controlled trial. <em>PLoS One</em>. 2025;20(6):e0319319.</li>
+<li>Block GA, et al. Effect of Tenapanor on Serum Phosphate in Patients Receiving Hemodialysis. <em>J Am Soc Nephrol</em>. 2017;28(6):1933-1942.</li>
+<li>Pergola PE, et al. A Randomized Trial of Tenapanor and Phosphate Binders as a Dual-Mechanism Treatment for Hyperphosphatemia (AMPLIFY). <em>J Am Soc Nephrol</em>. 2021;32(6):1465-1473.</li>
+<li>Natale P, et al. Phosphate binders for preventing and treating CKD-MBD. <em>Cochrane Database Syst Rev</em>. 2025;6:CD006023.</li>
+<li>Drugs.com. Auryxia Alternatives Compared. Accessed 2026.</li>
+<li>CADTH Common Drug Review. Pharmacoeconomic Review Report: Sucroferric Oxyhydroxide (Velphoro). 2020.</li>
+<li>NICE Guideline NG203: Chronic kidney disease: assessment and management. Evidence review: Use of phosphate binders. August 2021.</li>
+<li>ATAG. Cost-effectiveness evaluation of tenapanor for hyperphosphatemia in patients with chronic kidney disease on dialysis. <em>J Stage</em>. 2025;3(4):1-76.</li>
+<li>KDOQI Clinical Practice Guideline for Nutrition in CKD: 2020 Update. <em>Am J Kidney Dis</em>. doi:10.1053/j.ajkd.2020.05.006.</li>
+<li>Japanese Society for Dialysis Therapy. CKD-MBD Clinical Practice Guideline (2025 revision). <em>J Jpn Soc Dial Ther</em>. 2026;59:127-224.</li>
+<li>Li M, et al. Comparison of the efficacy of sucroferric oxyhydroxide and lanthanum carbonate in the hyperphosphatemia of maintainable hemodialysis. <em>BMC Pharmacol Toxicol</em>. 2025;26:78.</li>
+<li>Akebia Therapeutics. Auryxia (ferric citrate) Prescribing Information. 2015.</li>
+<li>Tzekov V, et al. Clinical Evaluation of Low-Dose Magnesium Carbonate as a Phosphate Binder in Chronic Hemodialysis Patients. <em>Life</em>. 2026.</li>
+<li>Block GA, et al. A Randomized Trial of the Impact of Ferric Citrate on Erythropoietin and Intravenous Iron Use in Patients Receiving Dialysis. <em>Am J Nephrol</em>. 2024.</li>
+</ol>
+</section>
+
+</main>
+</div>
+
+<script>
+// ── Navigation ──
+const navLinks = document.querySelectorAll('.nav-link');
+const sections = document.querySelectorAll('.section');
+
+navLinks.forEach(link => {
+link.addEventListener('click', () => {
+const target = link.dataset.section;
+navLinks.forEach(l => l.classList.remove('active'));
+link.classList.add('active');
+sections.forEach(s => s.classList.remove('active'));
+document.getElementById(target).classList.add('active');
+window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+});
+
+// ── Accordion ──
+document.querySelectorAll('.acc-header').forEach(header => {
+header.addEventListener('click', () => {
+header.parentElement.classList.toggle('open');
+});
+});
+
+// ── Tabs ──
+document.querySelectorAll('.tabs').forEach(tabGroup => {
+const tabs = tabGroup.querySelectorAll('.tab');
+tabs.forEach(tab => {
+tab.addEventListener('click', () => {
+tabs.forEach(t => t.classList.remove('active'));
+tab.classList.add('active');
+const parent = tabGroup.parentElement;
+parent.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+const target = document.getElementById(tab.dataset.tab);
+if (target) target.classList.add('active');
+});
+});
+});
+
+// ── Deep link via hash ──
+function handleHash() {
+const hash = window.location.hash.replace('#', '');
+if (hash) {
+const link = document.querySelector(`.nav-link[data-section="${hash}"]`);
+if (link) link.click();
+}
+}
+window.addEventListener('hashchange', handleHash);
+handleHash();
+</script>
+
+</body>
+</html>
